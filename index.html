@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Carrusel Vistoso</title>
+  <style>
+    :root{
+      --slide-ratio: 4/3;       /* relación de aspecto uniforme */
+      --fit: cover;             /* cover = recorte elegante | contain = sin recorte */
+      --frame: 12px;            /* grosor del marco negro */
+      --radius: 12px;           /* esquinas redondeadas */
+      --shadow: 0 10px 24px rgba(0,0,0,.35);
+      --ui-bg: rgba(0,0,0,0.5);
+      --ui-bg-hover: rgba(0,0,0,0.7);
+      --accent: #fff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; font-family: Arial, sans-serif; color: #fff; }
+
+    /* Fondo difuminado */
+    body {
+      position: relative;
+      background: url('hoja.jpg') no-repeat center center / cover;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(144, 238, 144, 0.6);
+      backdrop-filter: blur(8px);
+      z-index: -1;
+    }
+
+    .carousel {
+      width: 90%;
+      max-width: 900px;
+      margin: 60px auto;
+      overflow: hidden;
+      border-radius: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      position: relative;
+      background-color: #000;
+      user-select: none;
+      outline: none;
+    }
+
+    .slides {
+      display: flex;
+      transition: transform 0.6s ease;
+    }
+
+    .slides img{
+      flex: 0 0 100%;
+      width: 100%;
+      aspect-ratio: var(--slide-ratio);
+      object-fit: var(--fit);
+      object-position: center;
+      background: #111;
+      border: var(--frame) solid #000;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: block;
+    }
+
+    /* Botones */
+    .controls button{
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--ui-bg);
+      border: none;
+      color: #fff;
+      padding: 12px;
+      cursor: pointer;
+      border-radius: 50%;
+      font-size: 18px;
+      transition: background .2s ease;
+    }
+    .controls button:hover{ background: var(--ui-bg-hover); }
+    .controls .prev { left: 10px; }
+    .controls .next { right: 10px; }
+
+    /* Indicadores */
+    .indicators{
+      position: absolute;
+      bottom: 12px;
+      width: 100%;
+      text-align: center;
+    }
+    .indicators span{
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      margin: 0 5px;
+      background: var(--accent);
+      border-radius: 50%;
+      opacity: 0.5;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .indicators span:hover{ transform: scale(1.1); }
+    .indicators .active{ opacity: 1; }
+
+    /* Footer */
+    footer{
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      text-align: center;
+      padding: 15px 0;
+      backdrop-filter: blur(4px);
+    }
+    footer a{
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Carrusel -->
+  <div class="carousel">
+    <div class="slides">
+      <img src="maseta 4.jpg" alt="Imagen 1">
+      <img src="maseta 2.jpg" alt="Imagen 2">
+      <img src="maseta 7.jpg" alt="Imagen 3">
+      <img src="maseta 5.jpg" alt="Imagen 4">
+      <img src="maseta 1.jpg" alt="Imagen 5">
+    </div>
+
+    <div class="controls">
+      <button class="prev">&#10094;</button>
+      <button class="next">&#10095;</button>
+    </div>
+
+    <div class="indicators"></div>
+  </div>
+
+  <!-- Contacto -->
+  <footer>
+    <a href="tel:+123456789">Teléfono: +123 456 789</a>
+    <a href="mailto:deliveryweeb@gmail.com">Email: deliveryweeb@gmail.com</a>
+  </footer>
+
+  <script>
+    const track = document.querySelector('.slides');
+    const totalSlides = track.children.length;
+    const indicatorsContainer = document.querySelector('.indicators');
+    const btnNext = document.querySelector('.next');
+    const btnPrev = document.querySelector('.prev');
+
+    let currentIndex = 0;
+    const autoplayMs = 5000; // cada 5 segundos
+
+    // Crear indicadores
+    for (let i = 0; i < totalSlides; i++) {
+      const dot = document.createElement('span');
+      dot.dataset.slide = i;
+      if (i === 0) dot.classList.add('active');
+      dot.addEventListener('click', () => goToSlide(i));
+      indicatorsContainer.appendChild(dot);
+    }
+    const indicators = document.querySelectorAll('.indicators span');
+
+    function updateUI(){
+      track.style.transform = 'translateX(' + (-currentIndex * 100) + '%)';
+      indicators.forEach(d => d.classList.remove('active'));
+      indicators[currentIndex].classList.add('active');
+    }
+
+    function goToSlide(index){
+      currentIndex = (index + totalSlides) % totalSlides;
+      updateUI();
+    }
+
+    btnNext.addEventListener('click', () => goToSlide(currentIndex + 1));
+    btnPrev.addEventListener('click', () => goToSlide(currentIndex - 1));
+
+    // Auto cambio
+    setInterval(() => {
+      goToSlide(currentIndex + 1);
+    }, autoplayMs);
+  </script>
+
+</body>
+</html>
