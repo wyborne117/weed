@@ -5,11 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Carrusel Vistoso</title>
   <style>
-    :root{
-      --slide-ratio: 4/3;       /* relación de aspecto uniforme */
-      --fit: cover;             /* cover = recorte elegante | contain = sin recorte */
-      --frame: 12px;            /* grosor del marco negro */
-      --radius: 12px;           /* esquinas redondeadas */
+    @font-face {
+      font-family: 'Comic Sans MS';
+      src: local('Comic Sans MS'), local('ComicSansMS');
+    }
+
+    :root {
+      --slide-ratio: 4/3;
+      --fit: cover;
+      --frame: 12px;
+      --radius: 12px;
       --shadow: 0 10px 24px rgba(0,0,0,.35);
       --ui-bg: rgba(0,0,0,0.5);
       --ui-bg-hover: rgba(0,0,0,0.7);
@@ -19,7 +24,6 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { height: 100%; font-family: Arial, sans-serif; color: #fff; }
 
-    /* Fondo difuminado */
     body {
       position: relative;
       background: url('hoja.jpg') no-repeat center center / cover;
@@ -32,6 +36,34 @@
       background: rgba(144, 238, 144, 0.6);
       backdrop-filter: blur(8px);
       z-index: -1;
+    }
+
+    .info-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0,0,0,0.5);
+      padding: 20px;
+      margin: 40px auto 0;
+      width: 90%;
+      max-width: 900px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .info-text {
+      font-family: 'Comic Sans MS', cursive;
+      font-size: 1.1rem;
+      color: #fff;
+      line-height: 1.5;
+      flex: 1;
+      padding-right: 20px;
+    }
+
+    .info-image img {
+      max-width: 120px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.4);
     }
 
     .carousel {
@@ -52,7 +84,7 @@
       transition: transform 0.6s ease;
     }
 
-    .slides img{
+    .slides img {
       flex: 0 0 100%;
       width: 100%;
       aspect-ratio: var(--slide-ratio);
@@ -65,8 +97,7 @@
       display: block;
     }
 
-    /* Botones */
-    .controls button{
+    .controls button {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
@@ -79,18 +110,17 @@
       font-size: 18px;
       transition: background .2s ease;
     }
-    .controls button:hover{ background: var(--ui-bg-hover); }
+    .controls button:hover { background: var(--ui-bg-hover); }
     .controls .prev { left: 10px; }
     .controls .next { right: 10px; }
 
-    /* Indicadores */
-    .indicators{
+    .indicators {
       position: absolute;
       bottom: 12px;
       width: 100%;
       text-align: center;
     }
-    .indicators span{
+    .indicators span {
       display: inline-block;
       width: 12px;
       height: 12px;
@@ -101,11 +131,10 @@
       cursor: pointer;
       transition: opacity 0.2s, transform 0.2s;
     }
-    .indicators span:hover{ transform: scale(1.1); }
-    .indicators .active{ opacity: 1; }
+    .indicators span:hover { transform: scale(1.1); }
+    .indicators .active { opacity: 1; }
 
-    /* Footer */
-    footer{
+    footer {
       position: fixed;
       bottom: 0;
       width: 100%;
@@ -114,24 +143,55 @@
       padding: 15px 0;
       backdrop-filter: blur(4px);
     }
-    footer a{
+    footer a {
       color: #fff;
       text-decoration: none;
       font-weight: bold;
       margin: 0 10px;
     }
+
+    #clock {
+      position: fixed;
+      top: 100px;
+      left: 100px;
+      background: #000;
+      color: #0f0;
+      font-family: 'Courier New', monospace;
+      font-size: 1.2rem;
+      padding: 8px 12px;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(0,255,0,0.5);
+      z-index: 999;
+    }
+
+    #visits {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1rem;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Carrusel -->
+  <div class="info-section">
+    <div class="info-text">
+      <p>Pedir entrega con antelación en <strong>Telegram</strong><br>
+      <span>Lunes a sábado de <strong>10:00am a 4:00pm</strong><br>
+      <em>24 horas antes</em></span></p>
+    </div>
+    <div class="info-image">
+      <img src="mariguanin.jpg" alt="mariguanin">
+    </div>
+  </div>
+
   <div class="carousel">
     <div class="slides">
-      <img src="maseta 4.jpg" alt="Imagen 1">
-      <img src="maseta 2.jpg" alt="Imagen 2">
+      <img src="15 10.jpg" alt="Imagen 1">
+      <img src="dies.jpg" alt="Imagen 2">
       <img src="maseta 7.jpg" alt="Imagen 3">
-      <img src="maseta 5.jpg" alt="Imagen 4">
-      <img src="maseta 1.jpg" alt="Imagen 5">
+      <img src="maseta 6.jpg" alt="Imagen 4">
+      <img src="maseta 8.jpg" alt="Imagen 5">
     </div>
 
     <div class="controls">
@@ -142,52 +202,76 @@
     <div class="indicators"></div>
   </div>
 
-  <!-- Contacto -->
+  <div id="visits">Visitas: <span id="visitCount">0</span></div>
+  <div id="clock">00:00:00</div>
+
   <footer>
-    <a href="tel:+123456789">Teléfono: +50368224522</a>
+    <a href="tel:+50368224522">Teléfono: +50368224522</a>
     <a href="mailto:deliveryweeb@gmail.com">Email: deliveryweeb@gmail.com</a>
   </footer>
 
   <script>
-    const track = document.querySelector('.slides');
-    const totalSlides = track.children.length;
-    const indicatorsContainer = document.querySelector('.indicators');
-    const btnNext = document.querySelector('.next');
-    const btnPrev = document.querySelector('.prev');
+    document.addEventListener('DOMContentLoaded', () => {
+      const track = document.querySelector('.slides');
+      const totalSlides = track.children.length;
+      const indicatorsContainer = document.querySelector('.indicators');
+      const btnNext = document.querySelector('.next');
+      const btnPrev = document.querySelector('.prev');
+      let currentIndex = 0;
+      const autoplayMs = 5000;
+      let autoplayInterval;
 
-    let currentIndex = 0;
-    const autoplayMs = 5000; // cada 5 segundos
+      // Generar indicadores
+      for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('span');
+        dot.dataset.slide = i;
+        if (i === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+          goToSlide(i);
+          resetAutoplay();
+        });
+        indicatorsContainer.appendChild(dot);
+      }
+      const indicators = document.querySelectorAll('.indicators span');
 
-    // Crear indicadores
-    for (let i = 0; i < totalSlides; i++) {
-      const dot = document.createElement('span');
-      dot.dataset.slide = i;
-      if (i === 0) dot.classList.add('active');
-      dot.addEventListener('click', () => goToSlide(i));
-      indicatorsContainer.appendChild(dot);
-    }
-    const indicators = document.querySelectorAll('.indicators span');
+      // Actualiza posición e indicadores
+      function updateUI() {
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        indicators.forEach(d => d.classList.remove('active'));
+        indicators[currentIndex].classList.add('active');
+      }
 
-    function updateUI(){
-      track.style.transform = 'translateX(' + (-currentIndex * 100) + '%)';
-      indicators.forEach(d => d.classList.remove('active'));
-      indicators[currentIndex].classList.add('active');
-    }
+      // Navega a la diapositiva dada
+      function goToSlide(index) {
+        currentIndex = (index + totalSlides) % totalSlides;
+        updateUI();
+      }
 
-    function goToSlide(index){
-      currentIndex = (index + totalSlides) % totalSlides;
+      // Manejadores de botones
+      btnNext.addEventListener('click', () => {
+        goToSlide(currentIndex + 1);
+        resetAutoplay();
+      });
+      btnPrev.addEventListener('click', () => {
+        goToSlide(currentIndex - 1);
+        resetAutoplay();
+      });
+
+      // Autoplay
+      function startAutoplay() {
+        autoplayInterval = setInterval(() => {
+          goToSlide(currentIndex + 1);
+        }, autoplayMs);
+      }
+      function resetAutoplay() {
+        clearInterval(autoplayInterval);
+        startAutoplay();
+      }
+
+      // Inicializar
       updateUI();
-    }
-
-    btnNext.addEventListener('click', () => goToSlide(currentIndex + 1));
-    btnPrev.addEventListener('click', () => goToSlide(currentIndex - 1));
-
-    // Auto cambio
-    setInterval(() => {
-      goToSlide(currentIndex + 1);
-    }, autoplayMs);
+      startAutoplay();
+    });
   </script>
-
 </body>
-
 </html>
